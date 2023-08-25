@@ -1,25 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Test from "./App.test";
+import { ConfigProvider } from "antd";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import "./App.css";
+import { IQiankunProps } from ".";
 
-function App() {
+function App(props: IQiankunProps) {
+  console.log(window.__POWERED_BY_QIANKUN__ ,'window')
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter basename={window.__POWERED_BY_QIANKUN__ ? "/app-react" : "/"}>
+      <ConfigProvider getPopupContainer={() => props.container || document.body}>
+        <Switch>
+          <Route path="/" component={Test} />
+        </Switch>
+      </ConfigProvider>
+    </BrowserRouter>
   );
 }
 

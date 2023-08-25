@@ -1,19 +1,38 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+export interface IQiankunProps {
+  base: string;
+  container: HTMLElement; // 子应用所在容器
+}
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+function render(props: IQiankunProps) {
+  const { container } = props;
+  ReactDOM.render(
+    <App {...props} />,
+    container ? container.querySelector("#root") : document.querySelector("#root")
+  );
+}
+
+if (!window.__POWERED_BY_QIANKUN__) {
+  render({} as IQiankunProps);
+}
+
+export async function bootstrap() {
+  console.log("子应用启动");
+}
+
+export async function mount(props: IQiankunProps) {
+  console.log("挂载子应用", props);
+  render(props);
+}
+
+export async function unmount(props: IQiankunProps) {
+  const { container } = props;
+  const root = (
+    container ? container.querySelector("#root") : document.querySelector("#root")
+  ) as HTMLElement;
+  ReactDOM.unmountComponentAtNode(root);
+}
